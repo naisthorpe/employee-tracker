@@ -27,3 +27,5 @@ CREATE TABLE department (
     name VARCHAR(30) NOT NULL,
     PRIMARY KEY (id)
 );
+
+SELECT * FROM employee_trackerDB;
