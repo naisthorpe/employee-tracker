@@ -1,19 +1,16 @@
+DROP DATABASE IF EXISTS employee_trackerDB;
+
 CREATE DATABASE employee_trackerDB;
 
 USE employee_trackerDB;
 
-CREATE TABLE employee (
+CREATE TABLE department (
     id INT NOT NULL AUTO_INCREMENT,
-    first_name VARCHAR(30) NOT NULL,
-    last_name VARCHAR(30) NOT NULL,
-    position_id INT NOT NULL,
-    manager_id INT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY (position_id) REFERENCES position(id),
-    FOREIGN KEY (manager_id) REFERENCES position(id)
+    name VARCHAR(30) NOT NULL,
+    PRIMARY KEY (id)
 );
 
-CREATE TABLE position (
+CREATE TABLE job (
     id INT NOT NULL AUTO_INCREMENT,
     title VARCHAR(30) NOT NULL,
     salary DECIMAL(10,2) NOT NULL,
@@ -22,10 +19,18 @@ CREATE TABLE position (
     FOREIGN KEY (department_id) REFERENCES department(id)
 );
 
-CREATE TABLE department (
+
+CREATE TABLE employee (
     id INT NOT NULL AUTO_INCREMENT,
-    name VARCHAR(30) NOT NULL,
-    PRIMARY KEY (id)
+    first_name VARCHAR(30) NOT NULL,
+    last_name VARCHAR(30) NOT NULL,
+    job_id INT NOT NULL,
+    manager_id INT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (job_id) REFERENCES job(id),
+    FOREIGN KEY (manager_id) REFERENCES job(id)
 );
 
-SELECT * FROM employee_trackerDB;
+SELECT * FROM department;
+SELECT * FROM job;
+SELECT * FROM employee;
