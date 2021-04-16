@@ -16,6 +16,7 @@ CREATE TABLE job (
     salary DECIMAL(10,2) NOT NULL,
     department_id INT NOT NULL,
     PRIMARY KEY (id),
+    -- department_id references the id in the department table --
     FOREIGN KEY (department_id) REFERENCES department(id)
 );
 
@@ -27,8 +28,10 @@ CREATE TABLE employee (
     job_id INT NOT NULL,
     manager_id INT NULL,
     PRIMARY KEY (id),
+    -- job_id references the id in the job table --
     FOREIGN KEY (job_id) REFERENCES job(id),
-    FOREIGN KEY (manager_id) REFERENCES job(id)
+    -- manager_id references the id in the employee table -- 
+    FOREIGN KEY (manager_id) REFERENCES employee(id)
 );
 
 SELECT * FROM department;
