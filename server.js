@@ -1,19 +1,16 @@
-// Require express package
+// Set up requirements
 const express = require("express");
+const routes = require("./routes/routes");
+const sequelize = require("./config/connection");
 
-// Create the express server
 const app = express();
-
-// Set initial port
 const PORT = process.env.PORT || 3001;
 
-// Set up express app to handle data parsing
-app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.urlencoded({ extended:true }));
 
-// Routes
+app.use(routes);
 
-// Listener
-app.listen(PORT, () => {
-    console.log(`App listening on PORT: ${PORT}`);
+sequelize.sync({ force:false }).then(() => {
+    app.listen(PORT, () => console.log(`Now listening on PORT: ${PORT}`));
 });
