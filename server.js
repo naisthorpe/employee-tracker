@@ -4,6 +4,14 @@ const routes = require("./routes/routes");
 const sequelize = require("./config/connection");
 const inquirer = require("inquirer");
 
+const router = require("express").Router();
+
+const Department = require("./models/Department");
+const Job = require("./models/Job");
+const Employee = require("./models/Employee");
+
+const getAllEmployees = require("./routes/api/employeeRoutes");
+
 const app = express();
 const PORT = process.env.PORT || 3001;
 
@@ -13,30 +21,75 @@ app.use(express.urlencoded({ extended:true }));
 app.use(routes);
 
 const start = () => {
+    console.log("\n");
     inquirer
         .prompt(
             {
                 type: "list",
                 message: "What would you like to do?",
                 name: "choice",
-                choices: ["POST", "BID", "EXIT"]
+                choices: ["ADD Department", "ADD Job", "ADD Employee", "VIEW Departments", "VIEW Jobs", 
+                    "VIEW Employees", "UPDATE Employee Job", "EXIT Application"]
             }
         )
         .then((response) => {
             switch(response.choice) {
-                case ("POST"):
-                    console.log("COOL");
+                case ("ADD Department"):
+                    addDepartment();
                     break;
-                case ("BID"):
-                    console.log("ALRIGHT");
+                case ("ADD Job"):
+                    addJob();
                     break;
-                case ("EXIT"):
-                    console.log("KICK IT");
+                case ("ADD Employee"):
+                    addEmployee();
+                    break;
+                case ("VIEW Departments"):
+                    viewDepartments();
+                    break;
+                case ("VIEW Jobs"):
+                    viewJobs();
+                    break;
+                case ("VIEW Employees"):
+                    viewEmployees();
+                    break;
+                case ("UPDATE Employee Job"):
+                    updateEmployeeJob();
                     break;
                 default:
-                    console.log("MY DAD BEATS ME");
+                    console.log("Add connection end here.");
             }
         })
+};
+
+const addDepartment = () => {
+    inquirer
+        .prompt(
+            {
+                type: "input",
+                message: "What is the department name to be added?",
+                name: "deptName"
+            }
+        )
+        .then((response) => {
+            app.post("/api/department", (req, res) => {
+                Department.create({
+                    name: response.deptName
+                })
+                .then((newDept) => {
+                    res.json(newDept);
+                })
+                .catch((err) => {
+                    res.json(err);
+                })
+            });
+            console.log(response.deptName);
+            console.log("\n======\n");
+            start();
+        })
+};
+
+const viewEmployees = () => {
+    getAllEmployees();
 }
 
 sequelize.sync({ force:false }).then(() => {
